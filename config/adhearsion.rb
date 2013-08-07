@@ -8,7 +8,8 @@ Adhearsion.config do |config|
   config.punchblock.password = "1"
 end
 
-module DialWithApps
+# TODO: This should move to Matrioska
+module Matrioska::DialWithApps
   private
 
   def dial_with_apps(to, options = {}, &block)
@@ -25,8 +26,18 @@ module DialWithApps
   end
 end
 
+# TODO: This should be moved to Adhearsion core
+class Adhearsion::CallController::Dial::Dial
+  def merge(other)
+    mixer_name = SecureRandom.uuid
+    split
+    rejoin mixer_name: mixer_name
+    other.rejoin mixer_name: mixer_name
+  end
+end
+
 class MidCallMenuController < Adhearsion::CallController
-  include DialWithApps
+  include Matrioska::DialWithApps
 
   def run
     menu 'Press 1 to return to the call, 2 to transfer, or 3 to hang up on the other person.' do
@@ -50,10 +61,7 @@ class MidCallMenuController < Adhearsion::CallController
     speak "Transferring to #{transfer_to.response}"
     dial_with_apps "tel:#{transfer_to.response}" do |runner, dial|
       runner.map_app '1' do
-        mixer_name = SecureRandom.uuid
-        dial.split
-        dial.rejoin mixer_name: mixer_name
-        main_dial.rejoin mixer_name: mixer_name
+        dial.merge main_dial
       end
     end
   end
@@ -63,6 +71,7 @@ class MidCallMenuController < Adhearsion::CallController
   end
 end
 
+# TODO: Hold music should be natively supported in Adhearsion
 class HoldMusicController < Adhearsion::CallController
   def run
     output = play! 'http://www.kamazoy.com/wp-content/uploads/2013/03/013.wav', repeat: 1000
@@ -71,7 +80,7 @@ class HoldMusicController < Adhearsion::CallController
 end
 
 class InboundController < Adhearsion::CallController
-  include DialWithApps
+  include Matrioska::DialWithApps
 
   def run
     dial_with_apps 'sip:benlangfeld@sip2sip.info' do |runner, dial| # TODO: This will still end when the A leg hangs up. Need to be able to replace the main call in order to achieve attended transfer.
