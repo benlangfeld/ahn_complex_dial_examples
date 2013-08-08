@@ -47,16 +47,6 @@ module Matrioska::DialWithApps
   end
 end
 
-# TODO: This should be moved to Adhearsion core
-class Adhearsion::CallController::Dial::Dial
-  def merge(other)
-    mixer_name = SecureRandom.uuid
-    split
-    rejoin mixer_name: mixer_name
-    other.rejoin mixer_name: mixer_name
-  end
-end
-
 class MidCallMenuController < Adhearsion::CallController
   include Matrioska::DialWithApps
 
