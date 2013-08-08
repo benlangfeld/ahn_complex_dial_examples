@@ -12,14 +12,35 @@ end
 module Matrioska::DialWithApps
   private
 
-  def dial_with_apps(to, options = {}, &block)
+  def dial_with_local_apps(to, options = {}, &block)
     dial = Adhearsion::CallController::Dial::ParallelConfirmationDial.new to, options, call
 
     runner = Matrioska::AppRunner.new call
     yield runner, dial
     runner.start
 
-    dial.run
+    dial.track_originating_call
+    dial.prep_calls
+    dial.place_calls
+    dial.await_completion
+    dial.cleanup_calls
+    dial.status
+  end
+
+  def dial_with_remote_apps(to, options = {}, &block)
+    dial = Adhearsion::CallController::Dial::ParallelConfirmationDial.new to, options, call
+
+    dial.track_originating_call
+
+    dial.prep_calls do |new_call|
+      new_call.on_joined call do
+        runner = Matrioska::AppRunner.new new_call
+        yield runner, dial
+        runner.start
+      end
+    end
+
+    dial.place_calls
     dial.await_completion
     dial.cleanup_calls
     dial.status
@@ -59,7 +80,7 @@ class MidCallMenuController < Adhearsion::CallController
   def transfer
     transfer_to = ask 'Please enter the number to transfer to. Once connected, press 1 to rejoin.', limit: 10
     speak "Transferring to #{transfer_to.response}"
-    dial_with_apps "tel:#{transfer_to.response}" do |runner, dial|
+    dial_with_local_apps "tel:#{transfer_to.response}" do |runner, dial|
       runner.map_app '1' do
         dial.merge main_dial
       end
@@ -83,11 +104,11 @@ class InboundController < Adhearsion::CallController
   include Matrioska::DialWithApps
 
   def run
-    dial_with_apps 'sip:benlangfeld@sip2sip.info' do |runner, dial| # TODO: This will still end when the A leg hangs up. Need to be able to replace the main call in order to achieve attended transfer.
+    dial_with_remote_apps 'sip:5201996@localphone.com' do |runner, dial| # TODO: This will still end when the A leg hangs up. Need to be able to replace the main call in order to achieve attended transfer.
       runner.map_app '1' do
         logger.info "Splitting calls"
         blocker = Celluloid::Condition.new
-        dial.split main: MidCallMenuController, others: HoldMusicController, main_callback: ->(call) { blocker.broadcast }
+        dial.split main: HoldMusicController, others: MidCallMenuController, others_callback: ->(call) { blocker.broadcast }
         blocker.wait # This prevents the Matrioska listener from starting again until the calls are rejoined
       end
     end
