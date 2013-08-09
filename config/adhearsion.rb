@@ -72,7 +72,8 @@ class MidCallMenuController < Adhearsion::CallController
     speak "Transferring to #{transfer_to.response}"
     dial_with_local_apps "tel:#{transfer_to.response}" do |runner, dial|
       runner.map_app '1' do
-        dial.merge main_dial
+        dial.skip_cleanup
+        main_dial.merge dial
       end
     end
   end
@@ -94,7 +95,7 @@ class InboundController < Adhearsion::CallController
   include Matrioska::DialWithApps
 
   def run
-    dial_with_remote_apps 'sip:5201996@localphone.com' do |runner, dial| # TODO: This will still end when the A leg hangs up. Need to be able to replace the main call in order to achieve attended transfer.
+    dial_with_remote_apps 'sip:5201996@localphone.com' do |runner, dial|
       runner.map_app '1' do
         logger.info "Splitting calls"
         blocker = Celluloid::Condition.new

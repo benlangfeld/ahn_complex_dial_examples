@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/adhearsion/adhearsion.git
-  revision: 91c097ba628e663432be1b04c29ee436ebb25d85
+  revision: d0966cb9f5959fd55a73b8a2d98f98499c0d7701
   branch: feature/complex_dial
   specs:
     adhearsion (2.3.5)
@@ -94,7 +94,7 @@ GEM
     multi_json (1.7.8)
     niceogiri (1.1.2)
       nokogiri (~> 1.5)
-    nio4r (0.4.6)
+    nio4r (0.5.0)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     pry (0.9.12.2)
@@ -107,9 +107,9 @@ GEM
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
     rspec-core (2.14.4)
-    rspec-expectations (2.14.0)
+    rspec-expectations (2.14.1)
       diff-lcs (>= 1.1.3, < 2.0)
-    rspec-mocks (2.14.1)
+    rspec-mocks (2.14.3)
     rubinius-actor (0.0.2)
       rubinius-core-api
     rubinius-core-api (0.0.1)
