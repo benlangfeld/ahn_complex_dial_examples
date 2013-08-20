@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/adhearsion/adhearsion.git
-  revision: d0966cb9f5959fd55a73b8a2d98f98499c0d7701
+  revision: 762224295f5348aa162eb46cc2a372148b6423ff
   branch: feature/complex_dial
   specs:
     adhearsion (2.3.5)
@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git://github.com/adhearsion/punchblock.git
-  revision: 207a9d88fac23184751e9be02c0ef8bb82c40fc2
+  revision: 228debef425b775cc764f8233912d519c223e09e
   branch: develop
   specs:
     punchblock (1.9.4)
@@ -40,8 +40,8 @@ GIT
 
 GIT
   remote: git://github.com/polysics/matrioska.git
-  revision: 43283ccf1f8a7c14d0d4d5d00fe7137eb84110b1
-  branch: develop
+  revision: 03844e19a58da66adfbf27e857552080aefea641
+  branch: feature/dial_with_apps
   specs:
     matrioska (0.0.2)
       adhearsion (~> 2.1)
@@ -56,7 +56,7 @@ GEM
       thread_safe (~> 0.1)
       tzinfo (~> 0.3.37)
     adhearsion-loquacious (1.9.3)
-    atomic (1.1.12)
+    atomic (1.1.13)
     backports (3.3.3)
     blather (0.8.5)
       activesupport (>= 2.3.11)
@@ -82,7 +82,7 @@ GEM
       connection_pool (~> 1.0)
       rubinius-actor
     has-guarded-handlers (1.5.0)
-    i18n (0.6.4)
+    i18n (0.6.5)
     json (1.8.0)
     little-plugger (1.1.3)
     logging (1.8.1)
@@ -91,7 +91,7 @@ GEM
     method_source (0.8.2)
     mini_portile (0.5.1)
     minitest (4.7.5)
-    multi_json (1.7.8)
+    multi_json (1.7.9)
     niceogiri (1.1.2)
       nokogiri (~> 1.5)
     nio4r (0.5.0)
@@ -106,8 +106,8 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
-    rspec-core (2.14.4)
-    rspec-expectations (2.14.1)
+    rspec-core (2.14.5)
+    rspec-expectations (2.14.2)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.3)
     rubinius-actor (0.0.2)
